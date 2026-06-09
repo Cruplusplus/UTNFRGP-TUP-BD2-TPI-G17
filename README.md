@@ -6,31 +6,31 @@ Este proyecto consiste en el diseño e implementación de una base de datos rela
 El objetivo principal es resolver la problemática operativa y logística de un complejo deportivo a gran escala, permitiendo administrar de forma eficiente:
 ***Identidad unificada de Personas:** Control centralizado de datos personales evitando redundancias, clasificando mediante roles si corresponden a socios, empleados o ambos en simultáneo.
 ***Gestión de Recursos Humanos (Empleados y Roles):** Administración de todo el personal del club (profesores, administrativos, recepción, limpieza) bajo un esquema escalable basado en roles específicos.
-***Control Financiero (Membresías y Pagos):** Seguimiento unívoco de los contratos de membresías activos, su historial de renovaciones y el procesamiento de pagos utilizando tipos de datos precisos para auditorías monetarias[cite: 657, 658, 659].
-***Logística de Actividades (Clases e Inscripciones):** Cronograma dinámico de actividades con control automatizado de cupos máximos y disponibles en tiempo real[cite: 600, 602].
+***Control Financiero (Membresías y Pagos):** Seguimiento unívoco de los contratos de membresías activos, su historial de renovaciones y el procesamiento de pagos utilizando tipos de datos precisos para auditorías monetarias.
+***Logística de Actividades (Clases e Inscripciones):** Cronograma dinámico de actividades con control automatizado de cupos máximos y disponibles en tiempo real.
 
 ---
 
 ## Modelo de Datos y Arquitectura
- El sistema implementa una arquitectura relacional normalizada en **Tercera Forma Normal (3FN)** [cite: 624, 698] , diseñada estratégicamente para garantizar la máxima integridad referencial y performance en consultas complejas[cite: 697, 719].
+ El sistema implementa una arquitectura relacional normalizada en **Tercera Forma Normal (3FN)** , diseñada estratégicamente para garantizar la máxima integridad referencial y performance en consultas complejas.
 
 ### Decisiones Clave de Diseño Técnico
-1.   **Generalización/Especialización (Herencia):** Se implementó la tabla madre `Personas` vinculada en relaciones `1:1` con `Socios` y `Empleados`[cite: 690].  Esto permite optimizar el almacenamiento de datos de contacto y resolver la condición de negocio donde un empleado es también socio del establecimiento[cite: 649, 691].
-2.   **Estrategia de Claves Subrogadas e Índices Compuestos:** En la tabla intermedia `SocioMembresias` se optó por una clave primaria artificial (`IDSocioMembresia`) para agilizar los cruzamientos (`JOINs`) y mejorar la mantenibilidad del código[cite: 717, 719].  Para blindar la integridad del negocio y evitar cargas incoherentes o planes solapados, se aplicó una restricción de unicidad mediante un `CONSTRAINT UNIQUE` compuesto sobre `(IDSocio, IDMembresia, FechaInicio)`[cite: 718, 720].
-3.   **Precisión Financiera:** Todos los campos referentes a flujos de dinero (`Precio` en membresías y `Monto` en pagos) están configurados estrictamente con el tipo de dato `MONEY` nativo de SQL Server[cite: 659].
+1.   **Generalización/Especialización (Herencia):** Se implementó la tabla madre `Personas` vinculada en relaciones `1:1` con `Socios` y `Empleados`.  Esto permite optimizar el almacenamiento de datos de contacto y resolver la condición de negocio donde un empleado es también socio del establecimiento.
+2.   **Estrategia de Claves Subrogadas e Índices Compuestos:** En la tabla intermedia `SocioMembresias` se optó por una clave primaria artificial (`IDSocioMembresia`) para agilizar los cruzamientos (`JOINs`) y mejorar la mantenibilidad del código.  Para blindar la integridad del negocio y evitar cargas incoherentes o planes solapados, se aplicó una restricción de unicidad mediante un `CONSTRAINT UNIQUE` compuesto sobre `(IDSocio, IDMembresia, FechaInicio)`.
+3.   **Precisión Financiera:** Todos los campos referentes a flujos de dinero (`Precio` en membresías y `Monto` en pagos) están configurados estrictamente con el tipo de dato `MONEY` nativo de SQL Server.
 
 ---
 
 ## Requisitos Técnicos Implementados
- Para satisfacer los requisitos mínimos exigidos por la cátedra, el sistema incluye los siguientes objetos de base de datos distribuidos en archivos independientes dentro del repositorio[cite: 523, 549, 550]:
+ Para satisfacer los requisitos mínimos exigidos por la cátedra, el sistema incluye los siguientes objetos de base de datos distribuidos en archivos independientes dentro del repositorio:
 
-*  **Vistas (Mínimo 3):** Enfocadas en reportes críticos de administración, presentismo y popularidad de actividades[cite: 560].
+*  **Vistas (Mínimo 3):** Enfocadas en reportes críticos de administración, presentismo y popularidad de actividades.
 * **Procedimientos Almacenados (Mínimo 2):**
-    *  *De Reporte (Parametrizado):* Extracción automatizada de asistencias e historiales de socios[cite: 563].
-    *  *De Acción:* Procesamiento transaccional de pagos y actualización de vigencias[cite: 564].
+    *  *De Reporte (Parametrizado):* Extracción automatizada de asistencias e historiales de socios.
+    *  *De Acción:* Procesamiento transaccional de pagos y actualización de vigencias.
 * **Triggers (Mínimo 2):**
-    *  `AFTER INSERT`: Automatización del descuento del cupo disponible al inscribir un socio a una clase[cite: 565].
-    *  `AFTER DELETE`: Devolución inmediata del cupo disponible ante la cancelación de una reserva[cite: 566].
+    *  `AFTER INSERT`: Automatización del descuento del cupo disponible al inscribir un socio a una clase.
+    *  `AFTER DELETE`: Devolución inmediata del cupo disponible ante la cancelación de una reserva.
 
 ---
 
