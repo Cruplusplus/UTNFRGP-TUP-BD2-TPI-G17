@@ -4,8 +4,8 @@
 Este proyecto consiste en el diseño e implementación de una base de datos relacional para un **Sistema de Gestión de Gimnasio y Club de Alto Rendimiento**. El sistema está desarrollado sobre **SQL Server en Docker** como parte de la materia **Base de Datos II** de la Tecnicatura Universitaria en Programación (TUP) en la **Universidad Tecnológica Nacional - Facultad Regional General Pacheco (UTN FRGP)**.
 
 El objetivo principal es resolver la problemática operativa y logística de un complejo deportivo a gran escala, permitiendo administrar de forma eficiente:
-***Identidad unificada de Personas:** Control centralizado de datos personales evitando redundancias, clasificando mediante roles si corresponden a socios, empleados o ambos en simultáneo[cite: 648, 649, 670].
-***Gestión de Recursos Humanos (Empleados y Roles):** Administración de todo el personal del club (profesores, administrativos, recepción, limpieza) bajo un esquema escalable basado en roles específicos[cite: 670, 671].
+***Identidad unificada de Personas:** Control centralizado de datos personales evitando redundancias, clasificando mediante roles si corresponden a socios, empleados o ambos en simultáneo.
+***Gestión de Recursos Humanos (Empleados y Roles):** Administración de todo el personal del club (profesores, administrativos, recepción, limpieza) bajo un esquema escalable basado en roles específicos.
 ***Control Financiero (Membresías y Pagos):** Seguimiento unívoco de los contratos de membresías activos, su historial de renovaciones y el procesamiento de pagos utilizando tipos de datos precisos para auditorías monetarias[cite: 657, 658, 659].
 ***Logística de Actividades (Clases e Inscripciones):** Cronograma dinámico de actividades con control automatizado de cupos máximos y disponibles en tiempo real[cite: 600, 602].
 
