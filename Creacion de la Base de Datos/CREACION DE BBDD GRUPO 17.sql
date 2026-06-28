@@ -1,10 +1,10 @@
-CREATE DATABASE GimnasioDB;
+CREATE DATABASE GimnasioDB
 GO
 
 USE GimnasioDB;
 GO
 
-CREATE TABLE Personas(
+CREATE TABLE Personas (
     IDPersona BIGINT IDENTITY(1,1) NOT NULL,
     Nombre VARCHAR(50) NOT NULL,
     Apellido VARCHAR(50) NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE Personas(
 GO
 
 CREATE TABLE Roles (
-    IDRol BIGINT IDENTITY(1,1) NOT NULL,
+    IDRol INT IDENTITY(1,1) NOT NULL,
     NombreRol VARCHAR(100) NOT NULL,
     
     CONSTRAINT PK_Roles PRIMARY KEY (IDRol)
@@ -27,7 +27,7 @@ CREATE TABLE Roles (
 GO
 
 CREATE TABLE Membresias (
-    IDMembresia BIGINT IDENTITY(1,1) NOT NULL,
+    IDMembresia INT IDENTITY(1,1) NOT NULL,
     Nombre VARCHAR(100) NOT NULL,
     Precio MONEY NOT NULL,
     DuracionDias INTEGER NOT NULL,
@@ -37,21 +37,23 @@ CREATE TABLE Membresias (
 GO
 
 CREATE TABLE Socios (
-    IDSocio BIGINT NOT NULL,
+    IDSocio BIGINT IDENTITY(1,1) NOT NULL,
+    IDPersona BIGINT NOT NULL,
     FechaRegistro DATE NOT NULL,
     
     CONSTRAINT PK_Socios PRIMARY KEY (IDSocio),
-    CONSTRAINT FK_Socios_Personas FOREIGN KEY (IDSocio) REFERENCES Personas(IDPersona)
+    CONSTRAINT FK_Socios_Personas FOREIGN KEY (IDPersona) REFERENCES Personas(IDPersona)
 );
 GO
 
 CREATE TABLE Empleados (
-    IDEmpleado BIGINT NOT NULL,
-    IDRol BIGINT NOT NULL,
+    IDEmpleado BIGINT IDENTITY(1,1) NOT NULL,
+    IDPersona BIGINT NOT NULL,
+    IDRol INT NOT NULL,
     FechaContratacion DATE NOT NULL,
     
     CONSTRAINT PK_Empleados PRIMARY KEY (IDEmpleado),
-    CONSTRAINT FK_Empleados_Personas FOREIGN KEY (IDEmpleado) REFERENCES Personas(IDPersona),
+    CONSTRAINT FK_Empleados_Personas FOREIGN KEY (IDPersona) REFERENCES Personas(IDPersona),
     CONSTRAINT FK_Empleados_Roles FOREIGN KEY (IDRol) REFERENCES Roles(IDRol)
 );
 GO
@@ -72,7 +74,7 @@ GO
 CREATE TABLE SocioMembresias (
     IDSocioMembresia BIGINT IDENTITY(1,1) NOT NULL,
     IDSocio BIGINT NOT NULL,
-    IDMembresia BIGINT NOT NULL,
+    IDMembresia INT NOT NULL,
     FechaInicio DATE NOT NULL,
     FechaVencimiento DATE NOT NULL,
     Activa BIT NOT NULL,
