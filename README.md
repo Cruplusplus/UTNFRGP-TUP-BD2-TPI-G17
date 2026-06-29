@@ -1,8 +1,15 @@
 # Sistema de Gestión de Gimnasio y Club - TPI
+##Contexto Academico
+Este sistema fue desarrollado en el marco de la materia Base de Datos 2 (Año 2026) de la Tecnicatura Universitaria en Programación - UTN FRGP.
+
+Grupo 17 - Integrantes:
+*Juan Cruz Dominguez Pistoia
+*Lautaro Silva
+
+---
 
 ## Descripción del Sistema
-Este proyecto consiste en el diseño e implementación de una base de datos relacional para un **Sistema de Gestión de Gimnasio o Club**. El sistema está desarrollado sobre **SQL Server en Docker** como parte de la materia **Base de Datos II** de la Tecnicatura Universitaria en Programación (TUP) en la **Universidad Tecnológica Nacional - Facultad Regional General Pacheco (UTN FRGP)**.
-
+Este proyecto consiste en el diseño e implementación de una base de datos relacional para un **Sistema de Gestión de Gimnasio o Club**. El sistema está desarrollado sobre **SQL Server en Docker**.
 El objetivo principal es facilitar la operación y logística de un complejo deportivo a gran escala, permitiendo administrar de forma eficiente:
 ***Identidad unificada de Personas:** Control centralizado de datos personales evitando redundancias, clasificando mediante roles si corresponden a socios, empleados o ambos en simultáneo.
 ***Gestión de Recursos Humanos (Empleados y Roles):** Administración de todo el personal del club (profesores, administrativos, recepción, limpieza) bajo un esquema escalable basado en roles específicos.
