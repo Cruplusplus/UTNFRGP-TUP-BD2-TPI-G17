@@ -60,7 +60,6 @@ El repositorio está modularizado en archivos independientes para facilitar el c
 │   ├── 📜 Insercion de Datos.sql            # Carga masiva de 10 socios, 10 empleados y 5 clases (DML)
 │   ├── 📜 Vistas.sql            # Definición de las 3 abstracciones de lectura
 │   ├── 📜 Procedimientos.sql     # Lógica programada transaccional y de reportes
-│   ├── 📜 Triggers.sql          # Automatización logística de control de cupos
-│   └── 📜 06_Testeo.sql            # Suite automatizada de pruebas dinámicas "Antes/Después"
+│   └── 📜 Triggers.sql          # Automatización logística de control de cupos
 └── 📁 Documentacion
-    └── 📄 TPI_Gimnasio_DER.pdf      # Diagrama de Entidad-Relación formal
+    └── 📄 TPI_Gimnasio_DER.png      # Diagrama de Entidad-Relación formal
