@@ -10,48 +10,56 @@ Grupo 17 - Integrantes:
 ---
 
 ## Descripción del Sistema
-Este proyecto consiste en el diseño e implementación de una base de datos relacional para un **Sistema de Gestión de Gimnasio o Club**. El sistema está desarrollado sobre **SQL Server en Docker**.
-El objetivo principal es facilitar la operación y logística de un complejo deportivo a gran escala, permitiendo administrar de forma eficiente:
- * **Identidad unificada de Personas:** Control centralizado de datos personales evitando redundancias, clasificando mediante roles si corresponden a socios, empleados o ambos en simultáneo.
- * **Gestión de Recursos Humanos (Empleados y Roles):** Administración de todo el personal del club (profesores, administrativos, recepción, limpieza) bajo un esquema escalable basado en roles específicos.
- * **Control Financiero (Membresías y Pagos):** Seguimiento unívoco de los contratos de membresías activos, su historial de renovaciones y el procesamiento de pagos utilizando tipos de datos precisos para auditorías monetarias.
- * **Logística de Actividades (Clases e Inscripciones):** Cronograma dinámico de actividades con control automatizado de cupos máximos y disponibles en tiempo real.
+Este proyecto consiste en el diseño e implementación de una base de datos relacional para un **Sistema de Gestión de Gimnasio y Club Deportivo**. El sistema está desarrollado bajo el motor **SQL Server sobre contenedores Docker** como entrega obligatoria para la materia **Base de Datos II** de la Tecnicatura Universitaria en Programación (TUP) en la **Universidad Tecnológica Nacional - Facultad Regional General Pacheco (UTN FRGP)**.
+
+El objetivo principal es resolver de forma centralizada y eficiente la problemática operativa, logística y comercial de un complejo deportivo a gran escala, permitiendo administrar:
+* **Identidad Unificada de Personas:** Implementación de herencia/especialización para evitar redundancias de contacto, soportando nativamente que un empleado (ej: profesor o recepcionista) sea también socio deportivo del club sin duplicar sus registros.
+* **Recursos Humanos (Staff y Roles):** Clasificación del personal bajo un catálogo de roles dinámicos (Profesores de Planta, Personal Trainers, Recepcionistas y Personal de Limpieza).
+* **Control Comercial (Membresías y Contratos):** Seguimiento unívoco de los contratos de suscripción activos de los socios, control de vigencias lógicas y alertas de morosidad.
+* **Flujo Transaccional Financiero:** Procesamiento de cobros y estados de caja con la flexibilidad de permitir múltiples pagos fraccionados o cuotas por cada membresía.
+* **Logística de Clases y Vacantes:** Cronograma automatizado de actividades con cálculo y control dinámico de cupos en tiempo real para evitar la sobreventa de salas.
 
 ---
 
-## Modelo de Datos y Arquitectura
- El sistema implementa una arquitectura relacional normalizada en **Tercera Forma Normal (3FN)** , diseñada estratégicamente para garantizar la máxima integridad referencial y performance en consultas complejas.
+## Modelo de Datos y Decisiones de Arquitectura
+El sistema implementa una arquitectura relacional normalizada en **Tercera Forma Normal (3FN)**, aplicando las mejores prácticas recomendadas por la cátedra para el resguardo de la integridad referencial.
 
-### Decisiones Clave de Diseño Técnico
-1.   **Generalización/Especialización (Herencia):** Se implementó la tabla madre `Personas` vinculada en relaciones `1:1` con `Socios` y `Empleados`.  Esto permite optimizar el almacenamiento de datos de contacto y resolver la condición de negocio donde un empleado es también socio del establecimiento.
-2.   **Estrategia de Claves Subrogadas e Índices Compuestos:** En la tabla intermedia `SocioMembresias` se optó por una clave primaria artificial (`IDSocioMembresia`) para agilizar los cruzamientos (`JOINs`) y mejorar la mantenibilidad del código.  Para blindar la integridad del negocio y evitar cargas incoherentes o planes solapados, se aplicó una restricción de unicidad mediante un `CONSTRAINT UNIQUE` compuesto sobre `(IDSocio, IDMembresia, FechaInicio)`.
-3.   **Precisión Financiera:** Todos los campos referentes a flujos de dinero (`Precio` en membresías y `Monto` en pagos) están configurados estrictamente con el tipo de dato `MONEY` nativo de SQL Server.
+### Puntos Clave del Diseño Técnico
+1.  **Especialización de Entidades:** Se estructuró la tabla mestre `Personas` vinculada a las tablas dependientes `Socios` y `Empleados` mediante claves foráneas explícitas hacia `IDPersona`, rompiendo acoplamientos rígidos de uno a uno.
+2.  **Optimización de Tipos de Datos:** Se redujo el tamaño de almacenamiento en columnas del catálogo utilizando `INT` en `IDRol` e `IDMembresia` para optimizar los índices de búsqueda.
+3.  **Precisión Monetaria:** Todas las columnas referentes a flujos de caja y dinero (`Precio` en membresías y `Monto` en pagos) utilizan estrictamente el tipo de dato nativo `MONEY` de SQL Server.
+4.  **Claves e Índices lógicos:** Se utiliza una clave subrogada artificial (`IDSocioMembresia`) para agilizar los cruzamientos (`JOINs`), blindando la integridad comercial mediante un `CONSTRAINT UNIQUE` compuesto sobre `(IDSocio, IDMembresia, FechaInicio)` para impedir solapamientos.
 
 ---
 
 ## Requisitos Técnicos Implementados
- Para satisfacer los requisitos mínimos exigidos por la cátedra, el sistema incluye los siguientes objetos de base de datos distribuidos en archivos independientes dentro del repositorio:
+Para satisfacer la totalidad de los requisitos mínimos exigidos por la cátedra de la UTN, el sistema incluye los siguientes objetos programados:
 
-*  **Vistas (Mínimo 3):** Enfocadas en reportes críticos de administración, presentismo y popularidad de actividades.
-* **Procedimientos Almacenados (Mínimo 2):**
-    *  *De Reporte (Parametrizado):* Extracción automatizada de asistencias e historiales de socios.
-    *  *De Acción:* Procesamiento transaccional de pagos y actualización de vigencias.
-* **Triggers (Mínimo 2):**
-    *  `AFTER INSERT`: Automatización del descuento del cupo disponible al inscribir un socio a una clase.
-    *  `AFTER DELETE`: Devolución inmediata del cupo disponible ante la cancelación de una reserva.
+### Vistas Complejas (Mínimo 3)
+* `vw_SociosMembresiasActivas`: Reporte administrativo de pases vigentes con cálculo matemático de días restantes de entrenamiento.
+* `vw_OcupacionClases`: Análisis logístico de ocupación de salones con cálculo porcentual de alumnos inscritos sobre el cupo máximo.
+* `vw_RecaudacionMensual`: Auditoría analítica de caja agrupando cantidad de transacciones, recaudación total y ticket promedio por período mensual.
+
+### Procedimientos Almacenados (Mínimo 2)
+* `sp_ReporteAsistenciasSocio` *(Reporte Parametrizado)*: Extracción ordenada cronológicamente del presentismo e inasistencias de un socio dentro de un rango de fechas.
+* `sp_RegistrarPagoMembresia` *(Acción Transaccional)*: Procesamiento seguro de cobros parciales o cuotas bajo el principio de atomicidad, utilizando bloques de control de transacciones (`BEGIN TRANSACTION / COMMIT / ROLLBACK`) y captura estructurada de excepciones (`TRY...CATCH`) con `RAISERROR`.
+
+### Disparadores / Triggers DML (Mínimo 2)
+* `trg_Inscripcion_ActualizarCupo` (`AFTER INSERT`): Decrementa en tiempo real una vacante disponible en la tabla `Clases` al inscribir a un alumno. Cuenta con una validación restrictiva que cancela la operación y ejecuta un `ROLLBACK` si el salón está lleno.
+* `trg_Cancelacion_ActualizarCupo` (`AFTER DELETE`): Restituye de forma inmediata e incremental la vacante disponible en la clase ante la cancelación o baja de una reserva.
 
 ---
 
-## Estructura del Repositorio
- Siguiendo las recomendaciones del profesor para una correcta gestión del proyecto[cite: 523], el código SQL está modularizado de la siguiente manera:
+## Estructura de Scripts del Repositorio
+El repositorio está modularizado en archivos independientes para facilitar el control de versiones y evitar conflictos de mezcla (`merge conflicts`):
 
 ```text
-├── README.md                  # Descripción general y documentación del TPI
-├── SQL_Scripts
-│   ├── 01_Creacion.sql        # Script de inicialización y estructura de tablas (DDL)
-│   ├── 02_Datos.sql           # Carga de datos maestros e históricos de prueba (DML)
-│   ├── 03_Vistas.sql          # Definición de las 3 vistas requeridas
-│   ├── 04_Procedimientos.sql   # Lógica programada de reportes y acciones transaccionales
-│   └── 05_Triggers.sql        # Automatizaciones de cupos e integridad mediante disparadores
-└── Documentacion
-    └── TPI_Gimnasio_DER.pdf    # Diagrama de Entidad-Relación exportado
+├── 📄 README.md                    # Documentación y descripción del TPI
+├── 📁 Creacion de la Base de Datos
+│   ├── 📜 Creacion de BBDD.sql          # Estructura de tablas y restricciones (DDL)
+│   ├── 📜 Insercion de Datos.sql            # Carga masiva de 10 socios, 10 empleados y 5 clases (DML)
+│   ├── 📜 Vistas.sql            # Definición de las 3 abstracciones de lectura
+│   ├── 📜 Procedimientos.sql     # Lógica programada transaccional y de reportes
+│   └── 📜 Triggers.sql          # Automatización logística de control de cupos
+└── 📁 Documentacion
+    └── 📄 TPI_Gimnasio_DER.png      # Diagrama de Entidad-Relación formal
